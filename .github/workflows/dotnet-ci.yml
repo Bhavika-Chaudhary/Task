@@ -1,0 +1,31 @@
+name: .NET CI – Build & Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'   # Change if you use another .NET version
+
+      - name: Restore dependencies
+        run: dotnet restore "./task 5.sln"
+
+      - name: Build solution
+        run: dotnet build "./task 5.sln" --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test "./task 5.sln" --configuration Release --no-build --verbosity normal
